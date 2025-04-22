@@ -1,3 +1,4 @@
+import './i18n/i18n'; // 반드시 ReactDOM.render 전에 호출
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
