@@ -1,6 +1,20 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { useMemo, useState } from 'react';
-import { AppBar, Toolbar, Button, Container, ThemeProvider, CssBaseline, Switch } from '@mui/material';
+import {
+  AppBar,
+  Toolbar,
+  Container,
+  ThemeProvider,
+  CssBaseline,
+  Switch,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import { lightTheme, darkTheme } from './theme';
 import Home from './pages/HomePage';
 import Buttons from './pages/ButtonsPage';
@@ -19,77 +33,96 @@ import DataGridPage from './pages/DataGridPage';
 import LanguageSwitch from './components/LanguageSwitch';
 import Box from '@mui/material/Box';
 
-
-
+const navItems = [
+  { path: '/', label: 'Home' },
+  { path: '/buttons', label: 'Buttons' },
+  { path: '/typography', label: 'Typography' },
+  { path: '/forms', label: 'Forms' },
+  { path: '/dialog', label: 'Dialog' },
+  { path: '/table', label: 'Table' },
+  { path: '/tabs', label: 'Tabs' },
+  { path: '/snackbar', label: 'Snackbar' },
+  { path: '/drawer', label: 'Drawer' },
+  { path: '/accordion', label: 'Accordion' },
+  { path: '/autocomplete', label: 'Autocomplete' },
+  { path: '/hook-form', label: 'Hook Form' },
+  { path: '/datagrid', label: 'DataGrid' },
+];
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useMemo(() => (darkMode ? darkTheme : lightTheme), [darkMode]);
+
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', width: 250 }}>
+      <List>
+        {navItems.map(({ path, label }) => (
+          <ListItem key={path} disablePadding>
+            <ListItemButton component={Link} to={path}>
+              <ListItemText primary={label} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <SnackbarProvider>
-    <BrowserRouter>
-      <AppBar position="static">
-        <Toolbar>
-          <Button color="inherit" component={Link} to="/">Home</Button>
-          <Button color="inherit" component={Link} to="/buttons">Buttons</Button>
-          <Button color="inherit" component={Link} to="/typography">Typography</Button>
-          <Button color="inherit" component={Link} to="/forms">Forms</Button>
-          <Button color="inherit" component={Link} to="/dialog">Dialog</Button>
-          <Button color="inherit" component={Link} to="/table">Table</Button>
-          <Button color="inherit" component={Link} to="/tabs">Tabs</Button>
-          <Button color="inherit" component={Link} to="/snackbar">Snackbar</Button>
-          <Button color="inherit" component={Link} to="/drawer">Drawer</Button>
-          <Button color="inherit" component={Link} to="/accordion">Accordion</Button>
-          <Button color="inherit" component={Link} to="/autocomplete">Autocomplete</Button>
-          <Button color="inherit" component={Link} to="/hook-form">Hook Form</Button>
-          <Button color="inherit" component={Link} to="/datagrid">DataGrid</Button>
+        <BrowserRouter>
+          <AppBar position="static">
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2 }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Drawer
+                anchor="left"
+                open={drawerOpen}
+                onClose={handleDrawerToggle}
+              >
+                {drawer}
+              </Drawer>
+              <Switch
+                checked={darkMode}
+                onChange={() => setDarkMode(!darkMode)}
+                color="default"
+                sx={{ ml: 'auto' }}
+              />
+              <LanguageSwitch />
+            </Toolbar>
+          </AppBar>
 
-
-
-          <Switch
-              checked={darkMode}
-              onChange={() => setDarkMode(!darkMode)}
-              color="default"
-              sx={{ ml: 'auto' }}
-            />
-          <LanguageSwitch />
-
-            
-              
-            
-
-
-
-          
-        </Toolbar>
-      </AppBar>
-
-      <Container sx={{ mt: 4 }}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/buttons" element={<Buttons />} />
-          <Route path="/typography" element={<TypographyPage />} />
-          <Route path="/forms" element={<FormsPage />} />
-          <Route path="/dialog" element={<DialogPage />} />
-          <Route path="/table" element={<TablePage />} />
-          <Route path="/tabs" element={<TabsPage />} />
-          <Route path="/snackbar" element={<SnackbarPage />} />
-          <Route path="/drawer" element={<DrawerPage />} />
-          <Route path="/accordion" element={<AccordionPage />} />
-          <Route path="/autocomplete" element={<AutocompletePage />} />
-          <Route path="/hook-form" element={<HookFormPage />} />
-          <Route path="/datagrid" element={<DataGridPage />} />
-
-
-
-
-
-        </Routes>
-      </Container>
-    </BrowserRouter>
-    </SnackbarProvider>
+          <Container sx={{ mt: 4 }}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/buttons" element={<Buttons />} />
+              <Route path="/typography" element={<TypographyPage />} />
+              <Route path="/forms" element={<FormsPage />} />
+              <Route path="/dialog" element={<DialogPage />} />
+              <Route path="/table" element={<TablePage />} />
+              <Route path="/tabs" element={<TabsPage />} />
+              <Route path="/snackbar" element={<SnackbarPage />} />
+              <Route path="/drawer" element={<DrawerPage />} />
+              <Route path="/accordion" element={<AccordionPage />} />
+              <Route path="/autocomplete" element={<AutocompletePage />} />
+              <Route path="/hook-form" element={<HookFormPage />} />
+              <Route path="/datagrid" element={<DataGridPage />} />
+            </Routes>
+          </Container>
+        </BrowserRouter>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }
